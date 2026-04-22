@@ -134,8 +134,8 @@ Deno.serve(async (req: Request) => {
     for (const commit of commits) {
       try {
         const { data, error } = await supabase.rpc("triage_commit", {
-          p_prefix: commit.prefix,
           p_assigned_ids: commit.assigned_ids,
+          p_doc_id: null,
         });
         if (error) {
           results.push({
