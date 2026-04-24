@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
 import { corsHeaders, authenticate, errorResponse, jsonResponse } from "../_shared/utils.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const AUTH_TOKEN = Deno.env.get("PM_KNOWLEDGE_KEY") ?? "pm_knowledge_2026_secure";
+const AUTH_TOKEN = Deno.env.get("PM_KNOWLEDGE_KEY") ?? "";
 
 type IngestItem = {
   filename: string;

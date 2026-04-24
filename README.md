@@ -2,7 +2,9 @@
 
 Infrastructură Supabase pentru ecosistemul PM: RAG semantic search peste sursele triajate + sistem atomic de rezervare ID-uri pentru triaje paralele.
 
-Codul aici e sursa de adevăr. La `git push` pe `main`, GitHub Actions deployează automat pe Supabase.
+Codul aici e sursa de adevăr pentru schema și Edge Functions Supabase.
+
+Important: în acest repo nu există momentan GitHub Actions active. Un `git push` pe `main` NU aplică automat migrații și NU deployează Edge Functions. Deploy-ul se face manual până când CI/CD este reintrodus explicit.
 
 ---
 
@@ -32,13 +34,13 @@ supabase/
 
 .github/workflows/
 
-├── deploy-functions.yml              # auto-deploy Edge Functions
+├── deploy-functions.yml              # nu există momentan
 
-└── deploy-migrations.yml             # auto-apply SQL migrations
+└── deploy-migrations.yml             # nu există momentan
 
 ```
 
-**Nu sunt încă versionate în repo:** `knowledge-search`, `knowledge-ingest`, `knowledge-list`, `knowledge-delete`, `knowledge-fetch`. Sunt live pe Supabase și stabile. Când vrem să le modificăm, le descărcăm cu:
+**Notă:** `knowledge-search` și `knowledge-list` sunt menționate ca funcții live în proiect, dar nu sunt versionate în acest repo. `knowledge-ingest`, `knowledge-delete` și `knowledge-fetch` sunt versionate aici. Când vrem să modificăm funcții live neversionate, le descărcăm întâi cu:
 
 ```bash
 
@@ -50,9 +52,9 @@ supabase functions download knowledge-search --project-ref phscathhvjtbcbdbfehs
 
 ---
 
-## Setup CI/CD (o singură dată)
+## Setup CI/CD (opțional, momentan neconfigurat)
 
-`Settings → Secrets and variables → Actions → New repository secret`:
+Pentru a reactiva deploy automat, trebuie create workflow-urile în `.github/workflows/` și apoi configurate secrets în `Settings → Secrets and variables → Actions`:
 
 | Nume | Valoare |
 
@@ -76,11 +78,11 @@ supabase functions download knowledge-search --project-ref phscathhvjtbcbdbfehs
 
 ### Modificare cod
 
-Editezi fișier (browser GitHub sau local) → commit → Actions deployează în ~30 sec.
+Editezi fișier (browser GitHub sau local) → commit. Deploy-ul Edge Functions se face manual până când există workflow-uri active.
 
 ### Migrare SQL nouă
 
-Creezi `supabase/migrations/YYYYMMDDHHMMSS_descriere.sql` cu formule idempotente (`if not exists`, `on conflict`) → commit → Actions aplică.
+Creezi `supabase/migrations/YYYYMMDDHHMMSS_descriere.sql` cu formule idempotente (`if not exists`, `on conflict`) → commit. Aplicarea în Supabase se face manual până când există workflow-uri active.
 
 ---
 
@@ -88,7 +90,7 @@ Creezi `supabase/migrations/YYYYMMDDHHMMSS_descriere.sql` cu formule idempotente
 
 Base: `https://phscathhvjtbcbdbfehs.supabase.co/functions/v1/`
 
-Auth: `Authorization: Bearer pm_knowledge_2026_secure`
+Auth: `Authorization: Bearer <PM_KNOWLEDGE_KEY>`
 
 | Endpoint | Scop |
 
@@ -118,7 +120,7 @@ Auth: `Authorization: Bearer pm_knowledge_2026_secure`
 
 curl -s -X POST https://phscathhvjtbcbdbfehs.supabase.co/functions/v1/triage-status \
 
-  -H "Authorization: Bearer pm_knowledge_2026_secure"
+  -H "Authorization: Bearer $PM_KNOWLEDGE_KEY"
 
 ```
 

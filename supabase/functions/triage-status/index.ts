@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const PM_KNOWLEDGE_KEY = Deno.env.get("PM_KNOWLEDGE_KEY") ?? "pm_knowledge_2026_secure";
+const PM_KNOWLEDGE_KEY = Deno.env.get("PM_KNOWLEDGE_KEY") ?? "";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,7 +13,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "").trim();
-  if (token !== PM_KNOWLEDGE_KEY) {
+  if (!PM_KNOWLEDGE_KEY || token !== PM_KNOWLEDGE_KEY) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
