@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS public.rd_hypotheses (
 
 CREATE TABLE IF NOT EXISTS public.rd_reports (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  report_type text NOT NULL DEFAULT 'ad_hoc',
+  report_type text NOT NULL DEFAULT 'weekly_digest',
   title text NOT NULL,
   period_start date NULL,
   period_end date NULL,
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS public.rd_reports (
   updated_at timestamptz NOT NULL DEFAULT now(),
 
   CONSTRAINT rd_reports_report_type_check CHECK (
-    report_type IN ('daily', 'weekly', 'monthly', 'sprint', 'deep_dive', 'incident', 'ad_hoc')
+    report_type IN ('weekly_digest', 'monthly_framework_memo', 'product_opportunity', 'alert')
   ),
   CONSTRAINT rd_reports_status_check CHECK (
     status IN ('draft', 'reviewed', 'published', 'archived')
